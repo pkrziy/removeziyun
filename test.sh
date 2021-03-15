@@ -1,80 +1,20 @@
 #!/bin/bash
-computer=$[RANDOM%3+1]
-clear
-echo "##########################"
-echo "#     石头剪刀布游戏	 #"
-echo -e "#\033[32m  请根据下面提示出拳：  \033[0m#"
-echo "##########################"
-echo "|---------------|"
-echo "|	1.石头	|"
-echo "|	2.剪刀  |"
-echo "|	3.布    |"
-echo "|---------------|"
-echo
-read -p "请您出拳头[1-3]:" person
-clear
-case $person in
-1)
-	if [[ $computer == 1 ]]; then
-		echo "-----------------------"
-		echo "    您出拳：石头       "
-		echo "    电脑出拳：石头     "
-		echo "-----------------------"
-		echo -e "\033[32m平局\033[0m"
-	elif [[ $computer == 2 ]]; then
-		echo "-----------------------"
-		echo "    您出拳：石头       "
-		echo "    电脑出拳：剪刀     "
-		echo "-----------------------"
-		echo -e "\033[32m恭喜，您赢了\033[0m"
-	elif [[ $computer == 3 ]]; then
-		echo "-----------------------"
-		echo "    您出拳：石头       "
-		echo "    电脑出拳：布       "
-		echo "-----------------------"
-		echo -e "\033[32m电脑赢了\033[0m"
-	fi;;
-2)
-	if [[ $computer == 1 ]]; then
-		echo "-----------------------"
-		echo "    您出拳：剪刀       "
-		echo "    电脑出拳：石头     "
-		echo "-----------------------"
-		echo -e "\033[32m电脑赢了\033[0m"
-	elif [[ $computer == 2 ]]; then
-		echo "-----------------------"
-		echo "    您出拳：剪刀       "
-		echo "    电脑出拳：剪刀     "
-		echo "-----------------------"
-		echo -e "\033[32m平局\033[0m"
-	elif [[ $computer == 3 ]]; then
-		echo "-----------------------"
-		echo "    您出拳：剪刀       "
-		echo "    电脑出拳：布       "
-		echo "-----------------------"
-		echo -e "\033[32m您赢了\033[0m"
-	fi;;
-3)
-	if [[ $computer == 1 ]]; then
-		echo "-----------------------"
-		echo "    您出拳：布         "
-		echo "    电脑出拳：石头     "
-		echo "-----------------------"
-		echo -e "\033[32m您赢了\033[0m"
-	elif [[ $computer == 2 ]]; then
-		echo "-----------------------"
-		echo "    您出拳：布         "
-		echo "    电脑出拳：剪刀     "
-		echo "-----------------------"
-		echo -e "\033[32m电脑赢了\033[0m"
-	elif [[ $computer == 3 ]]; then
-		echo "-----------------------"
-		echo "    您出拳：布         "
-		echo "    电脑出拳：布       "
-		echo "-----------------------"
-		echo -e "\033[32m平局\033[0m"
-	fi;;
-*)
-	echo -e "\033[91m无效的输入值，请输入1-3选项！\033[0m"
-esac
+#使用curl访问具体的http页面,检查http的状态码
+
+url=http://192.168.1.10/index.html
+date=$(date +"%Y-%m-%d %H:%M:%S")
+status_code=$(curl -m 3 -s -o /dev/null -w %{http_code} %url)
+mail_to="root@localhost"
+mail_subject="http_warning"
+
+if [ $status_code -ne 200 ];then
+	mail -s $mail_subject $mail_to <<-EOF
+	检测时间为：$date
+	$url 页面异常，服务器返回状态码：$status_code .
+EOF
+else
+	cat >> /var/log/http_check_log <<-EOF
+		$date "$url 页面访问正常。"
+EOF
+fi
 
