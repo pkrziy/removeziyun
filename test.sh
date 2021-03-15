@@ -1,20 +1,28 @@
 #!/bin/bash
-#使用curl访问具体的http页面,检查http的状态码
+#通过位置变量实现自动分区
 
-url=http://192.168.1.10/index.html
-date=$(date +"%Y-%m-%d %H:%M:%S")
-status_code=$(curl -m 3 -s -o /dev/null -w %{http_code} %url)
-mail_to="root@localhost"
-mail_subject="http_warning"
+if [ $# -ne 2 ]; then
+	echo -e "\033[91m\t参数有误...\033[0m"
+	echo "用法：$0 <磁盘名称> <create | new | remove | query>"
+	exit
+fi
 
-if [ $status_code -ne 200 ];then
-	mail -s $mail_subject $mail_to <<-EOF
-	检测时间为：$date
-	$url 页面异常，服务器返回状态码：$status_code .
-EOF
+if [ ! -b $1 ]; then
+	echo -e "\033[91m磁盘不存在！\033[0m"
+	exit
+fi
+
+if [[ $2 == create ]]; then
+	parted -s $1 mklabel gpt
+elif [[ $2 == new ]]; then
+	parted -s $1 mkpart primary 1 100%
+elif [[ $2 == remove ]]; then
+	parted -s $1 rm 1
+elif [[ $2 == query ]]; then
+	parted -s $1 print
 else
-	cat >> /var/log/http_check_log <<-EOF
-		$date "$url 页面访问正常。"
-EOF
+	clear
+	echo -e "\033[91m\t操作指令有误....\033[0m"
+	echo "可用指令：[create | new | remove | query]"
 fi
 
