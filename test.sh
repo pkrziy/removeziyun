@@ -1,29 +1,80 @@
 #!/bin/bash
-read -p “请输入一个正整数：” num
-sum=$[num*(num+1)/2]
-echo -e "\033[38m$num以内整数的总和是：$sum\033[0m"
-read -p "请输入三角形的底边长度：" bottom
-read -p "请输入三角形的高度：" hight
-A=$(echo "scale=1;1/2*$bottom*$hight" | bc)
-echo -e "\033[032m三角形的面积是：$A\033[0m"
-read -p "梯形的上底:" a
-read -p "梯形的下底:" b
-read -p "梯形的高度:" c
-A=$(echo "scale=2;($a+$b)*$c/2" | bc)
-echo -e "\033[032m梯形的面积: $A\033[0m"
-read -p "请输入圆的半径:" r
-A=$(echo "scale=2;3.14*$r^2" | bc)
-echo -e "\033[32m圆形的面积: $A\033[0m"
-read -p "请输入秒数:" sec
-ms=$[sec*1000]
-echo -e "\033[32m${sec}秒=${ms}毫秒\033[0m"
-us=$[sec*1000000]
-echo -e "\033[32m${sec}秒=${us}微秒\033[0m"
-hour=$(echo "scale=2;${sec}/60/60" | bc)
-echo -e "\033[32m${sec}秒=${hour}小时\033[0m"
-read -p "请输入要转换的KB:" k
-M=$(echo "scale=2,$k/1024" | bc)
-echo -e "\033[32m${k}KB等于${M}MB\033[0m"
-G=$(echo "scale=2,$k/1024/1024" | bc)
-echo -e "\033[32m${k}KB等于${G}GB\033[0m"
-最强神话帝皇。
+computer=$[RANDOM%3+1]
+clear
+echo "##########################"
+echo "#     石头剪刀布游戏	 #"
+echo -e "#\033[32m  请根据下面提示出拳：  \033[0m#"
+echo "##########################"
+echo "|---------------|"
+echo "|	1.石头	|"
+echo "|	2.剪刀  |"
+echo "|	3.布    |"
+echo "|---------------|"
+echo
+read -p "请您出拳头[1-3]:" person
+clear
+case $person in
+1)
+	if [[ $computer == 1 ]]; then
+		echo "-----------------------"
+		echo "    您出拳：石头       "
+		echo "    电脑出拳：石头     "
+		echo "-----------------------"
+		echo -e "\033[32m平局\033[0m"
+	elif [[ $computer == 2 ]]; then
+		echo "-----------------------"
+		echo "    您出拳：石头       "
+		echo "    电脑出拳：剪刀     "
+		echo "-----------------------"
+		echo -e "\033[32m恭喜，您赢了\033[0m"
+	elif [[ $computer == 3 ]]; then
+		echo "-----------------------"
+		echo "    您出拳：石头       "
+		echo "    电脑出拳：布       "
+		echo "-----------------------"
+		echo -e "\033[32m电脑赢了\033[0m"
+	fi;;
+2)
+	if [[ $computer == 1 ]]; then
+		echo "-----------------------"
+		echo "    您出拳：剪刀       "
+		echo "    电脑出拳：石头     "
+		echo "-----------------------"
+		echo -e "\033[32m电脑赢了\033[0m"
+	elif [[ $computer == 2 ]]; then
+		echo "-----------------------"
+		echo "    您出拳：剪刀       "
+		echo "    电脑出拳：剪刀     "
+		echo "-----------------------"
+		echo -e "\033[32m平局\033[0m"
+	elif [[ $computer == 3 ]]; then
+		echo "-----------------------"
+		echo "    您出拳：剪刀       "
+		echo "    电脑出拳：布       "
+		echo "-----------------------"
+		echo -e "\033[32m您赢了\033[0m"
+	fi;;
+3)
+	if [[ $computer == 1 ]]; then
+		echo "-----------------------"
+		echo "    您出拳：布         "
+		echo "    电脑出拳：石头     "
+		echo "-----------------------"
+		echo -e "\033[32m您赢了\033[0m"
+	elif [[ $computer == 2 ]]; then
+		echo "-----------------------"
+		echo "    您出拳：布         "
+		echo "    电脑出拳：剪刀     "
+		echo "-----------------------"
+		echo -e "\033[32m电脑赢了\033[0m"
+	elif [[ $computer == 3 ]]; then
+		echo "-----------------------"
+		echo "    您出拳：布         "
+		echo "    电脑出拳：布       "
+		echo "-----------------------"
+		echo -e "\033[32m平局\033[0m"
+	fi;;
+*)
+	echo -e "\033[91m无效的输入值，请输入1-3选项！\033[0m"
+esac
+
